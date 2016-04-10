@@ -1,0 +1,1 @@
+A viewgroup enable custom size of childviews and change their position which has same size by drag
