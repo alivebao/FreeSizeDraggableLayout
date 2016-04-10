@@ -7,9 +7,18 @@ import android.view.View;
  * Created by miaoyunze on 2016/4/9.
  */
 public class DetailView {
+    /**
+     * begin point in freesizedraggablelayout
+     */
     private Point mBeginPoint;
+    /**
+     *size of view, performance by unit size
+     */
     private int mWidthNum;
     private int mHeightNum;
+    /**
+     * view showed in freesizedraggablelayout
+     */
     private View mView;
 
     public DetailView() {

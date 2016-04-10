@@ -23,24 +23,51 @@ import java.util.List;
  */
 public class FreeSizeDraggableLayout extends ViewGroup {
     final String TAG = "FreeSizeDraggableLayout";
+    /**
+     * click position out of child view of viewgroup
+     */
     final int INVALID_POSITION = -1;
+    /**
+     * unit size of viewgroup, width and height is default 4
+     */
     private int mUnitWidthNum = 4;
     private int mUnitHeightNum = 4;
+    /**
+     * calculate by UnitSize and real size of device
+     */
     private int mUnitWidth;
     private int mUnitHeight;
+    /**
+     * save the data of child views
+     */
     private List<DetailView> listViews;
-
-    WindowManager.LayoutParams mWindowLayoutParams;
+    /**
+     * position of clicked, used to calculate the view pressed
+     */
     private int mClickX;
     private int mClickY;
+    /**
+     * a imageview created to move with fingure when a subview in
+     * freesizedraggablelayout pressed
+     */
+    private ImageView mDragImageView;
+    /**
+     * some params aux to get the real position of ImageView which need to draw
+     */
     private int mPoint2ItemLeft;
     private int mPoint2ItemTop;
     private int mOffset2Left;
     private int mOffset2Top;
     private int mStatusHeight;
-    private int mViewPadding = 5;
-    private ImageView mDragImageView;
     private WindowManager mWindowManager;
+    private WindowManager.LayoutParams mWindowLayoutParams;
+    /**
+     * padding of each child vie
+     */
+    private int mViewPadding = 5;
+    /**
+     * index of pressed DetailView in listView
+     */
     private int mPressedItem = INVALID_POSITION;
     private long mResponseTime = 300;
     private Handler mHandler = new Handler();
@@ -73,42 +100,6 @@ public class FreeSizeDraggableLayout extends ViewGroup {
         mStatusHeight = getStatusHeight(getContext());
     }
 
-    private void createPressImageView(View v, int x, int y) {
-        mWindowLayoutParams = new WindowManager.LayoutParams();
-        mWindowLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
-
-        mWindowLayoutParams.x = x - mPoint2ItemLeft + mOffset2Left;
-        mWindowLayoutParams.y = y - mPoint2ItemTop + mOffset2Top - mStatusHeight;
-        mWindowLayoutParams.alpha = 0.5f;
-        mWindowLayoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        mWindowLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        mWindowLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
-
-        mDragImageView = new ImageView(getContext());
-        v.setDrawingCacheEnabled(true);
-        Bitmap bitmap = Bitmap.createBitmap(v.getDrawingCache());
-        mDragImageView.setImageBitmap(bitmap);
-        v.destroyDrawingCache();
-        mWindowManager.addView(mDragImageView, mWindowLayoutParams);
-    }
-
-    public void setList(List<DetailView> list) {
-        listViews = list;
-        removeAllViews();
-        for (DetailView v : listViews) {
-            addView(v.getView());
-        }
-    }
-
-    public void setUnitWidthNum(int i) {
-        mUnitWidthNum = i;
-    }
-
-    public void setUnitHeightNum(int i) {
-        mUnitHeightNum = i;
-    }
-
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         switch (ev.getAction()) {
@@ -120,6 +111,7 @@ public class FreeSizeDraggableLayout extends ViewGroup {
 
                 mClickX = (int) ev.getX();
                 mClickY = (int) ev.getY();
+
                 mPoint2ItemTop = mClickY - listViews.get(mPressedItem).getView().getTop();
                 mPoint2ItemLeft = mClickX - listViews.get(mPressedItem).getView().getLeft();
 
@@ -128,11 +120,14 @@ public class FreeSizeDraggableLayout extends ViewGroup {
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (mPress) {
+                    //update imgview's position, it will move with finger
                     mWindowLayoutParams.x = (int) ev.getX() - mPoint2ItemLeft + mOffset2Left;
                     mWindowLayoutParams.y = (int) ev.getY() - mPoint2ItemTop + mOffset2Top - mStatusHeight;
                     mWindowManager.updateViewLayout(mDragImageView, mWindowLayoutParams);
 
                     int iPrepareChangePosition = getClickedItem(new Point((int) ev.getX(), (int) ev.getY()));
+                    //check if the position of finger moved in a child view, if it's true
+                    //and child view has same size with pressed view, change their position
                     if (iPrepareChangePosition != INVALID_POSITION &&
                             listViews.get(iPrepareChangePosition).bSameSize(listViews.get(mPressedItem))) {
                         View viewPrepareChange = listViews.get(iPrepareChangePosition).getView();
@@ -158,12 +153,87 @@ public class FreeSizeDraggableLayout extends ViewGroup {
         return super.dispatchTouchEvent(ev);
     }
 
+    /**
+     * create a image for the pressed view
+     *
+     * @param v
+     * @param x
+     * @param y
+     */
+    private void createPressImageView(View v, int x, int y) {
+        mWindowLayoutParams = new WindowManager.LayoutParams();
+        mWindowLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
+
+        mWindowLayoutParams.x = x - mPoint2ItemLeft + mOffset2Left;
+        mWindowLayoutParams.y = y - mPoint2ItemTop + mOffset2Top - mStatusHeight;
+        mWindowLayoutParams.alpha = 0.5f;
+        mWindowLayoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        mWindowLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        mWindowLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
+
+        //create the bitmap of view
+        mDragImageView = new ImageView(getContext());
+        v.setDrawingCacheEnabled(true);
+        Bitmap bitmap = Bitmap.createBitmap(v.getDrawingCache());
+        mDragImageView.setImageBitmap(bitmap);
+        v.destroyDrawingCache();
+
+        mWindowManager.addView(mDragImageView, mWindowLayoutParams);
+    }
+
+    /**
+     * set the list of view in freesizedraggablelayout
+     *
+     * @param list
+     */
+    public void setList(List<DetailView> list) {
+        listViews = list;
+        removeAllViews();
+        for (DetailView v : listViews) {
+            addView(v.getView());
+        }
+    }
+
+    /**
+     * set the width of viewgroup
+     *
+     * @param i
+     */
+    public void setUnitWidthNum(int i) {
+        mUnitWidthNum = i;
+    }
+
+    /**
+     * set the height of viewgroup
+     *
+     * @param i
+     */
+    public void setUnitHeightNum(int i) {
+        mUnitHeightNum = i;
+    }
+
+
+    /**
+     * change position_data of DetailView. It's very important
+     * cause if a onLayout is called then freeseizedraggablelayout
+     * will redraw all items according to their point member.
+     *
+     * @param i
+     * @param j
+     */
     private void changePositionInList(int i, int j) {
         Point p = listViews.get(i).getPoint();
         listViews.get(i).setPoint(listViews.get(j).getPoint());
         listViews.get(j).setPoint(p);
     }
 
+    /**
+     * change the position of two views.
+     *
+     * @param v1
+     * @param v2
+     */
     private void changeViewsPosition(View v1, View v2) {
         int x = v1.getLeft();
         int y = v1.getTop();
@@ -182,6 +252,12 @@ public class FreeSizeDraggableLayout extends ViewGroup {
 
     }
 
+    /**
+     * get the clicked view's index in listView
+     *
+     * @param p
+     * @return
+     */
     private int getClickedItem(Point p) {
         int i = INVALID_POSITION;
         for (DetailView view : listViews) {
@@ -195,16 +271,9 @@ public class FreeSizeDraggableLayout extends ViewGroup {
         return i;
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-        mUnitWidth = MeasureSpec.getSize(widthMeasureSpec) / mUnitWidthNum;
-        mUnitHeight = MeasureSpec.getSize(heightMeasureSpec) / mUnitHeightNum;
-    }
-
     /**
      * set the padding of subviews in layout, default is 5
+     *
      * @param i
      */
     public void setsubViewPadding(int i) {
@@ -212,9 +281,17 @@ public class FreeSizeDraggableLayout extends ViewGroup {
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        //set the unit size
+        mUnitWidth = MeasureSpec.getSize(widthMeasureSpec) / mUnitWidthNum;
+        mUnitHeight = MeasureSpec.getSize(heightMeasureSpec) / mUnitHeightNum;
+    }
+    @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int iChildCount = getChildCount();
         for (int i = 0; i < iChildCount; ++i) {
+            //set child view's layout with padding
             DetailView dvView = listViews.get(i);
             View vChild = getChildAt(i);
             int iL = dvView.getPoint().x * mUnitWidth;
@@ -225,6 +302,12 @@ public class FreeSizeDraggableLayout extends ViewGroup {
         }
     }
 
+    /**
+     * get height of statusbar
+     *
+     * @param context
+     * @return
+     */
     private static int getStatusHeight(Context context) {
         int statusHeight = 0;
         Rect localRect = new Rect();
