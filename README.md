@@ -8,10 +8,10 @@ A viewgroup enable custom size of childviews and change their position which has
 
 ###Demo
 
-![FreeSizeDraggableLayout](http://7xnuqp.com1.z0.glb.clouddn.com/freeseizedraggablelayout_demo.gif)
+![FreeSizeDraggableLayout](http://7xsv7c.com1.z0.glb.clouddn.com/freeseizedraggablelayout_demo_compress.gif)
 
 
-[Download Demo](https://github.com/alivebao/FreeSizeDraggableLayout/tree/master/app/app-release.apk)
+[Download Demo](http://7xsv7c.com1.z0.glb.clouddn.com/freeseizedraggablelayout_demo.apk)
 
 
 ###Usage
@@ -93,4 +93,5 @@ you can get how to use it easily at [demo's MainActivity](https://github.com/ali
 ----
 
 1.data is just set by the function "setlist" in viewgroup(freeSizeDraggableLayout), an adapter will added in next version
-2.Event dispatch mechanism in viewgroup is a mess
+
+2.Event dispatch in FreeSizeDraggableLayout is a mess
