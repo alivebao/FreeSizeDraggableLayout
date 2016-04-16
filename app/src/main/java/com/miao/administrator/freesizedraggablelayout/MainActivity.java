@@ -59,10 +59,14 @@ public class MainActivity extends AppCompatActivity {
             list.add(new DetailView(new Point(0, 2), 4, 2, createButton(4)));
         }
         if (id % DEMONUM == 2) {
-            list.add(new DetailView(new Point(0, 0), 2, 2, createWebView(1)));
-            list.add(new DetailView(new Point(2, 0), 2, 2, createWebView(2)));
-            list.add(new DetailView(new Point(0, 2), 2, 2, createWebView(3)));
-            list.add(new DetailView(new Point(2, 2), 2, 2, createWebView(4)));
+            list.add(new DetailView(new Point(0, 0), 2, 1, createButton(1)));
+            list.add(new DetailView(new Point(0, 1), 2, 1, createButton(2)));
+            list.add(new DetailView(new Point(2, 0), 2, 2, createButton(3)));
+            list.add(new DetailView(new Point(0, 2), 1, 2, createButton(4)));
+            list.add(new DetailView(new Point(1, 2), 1, 2, createButton(5)));
+            list.add(new DetailView(new Point(2, 2), 1, 2, createButton(6)));
+            list.add(new DetailView(new Point(3, 2), 1, 1, createButton(7)));
+            list.add(new DetailView(new Point(3, 3), 1, 1, createButton(8)));
         }
         if (id % DEMONUM == 3) {
             list.add(new DetailView(new Point(0, 0), 2, 2, createWebView(1)));

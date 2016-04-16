@@ -5,13 +5,19 @@
 A viewgroup enable custom size of childviews and change their position which has same size by drag
 
 ---
+###Analyze
+
+
+[FreeSizeDraggableLayout实现过程解析](http://alivebao.github.io/2016/04/16/FreeSizeDraggableLayout/)
+
 
 ###Demo
 
-![FreeSizeDraggableLayout](http://7xsv7c.com1.z0.glb.clouddn.com/freeseizedraggablelayout_demo_compress.gif)
+
+![FreeSizeDraggableLayout](http://7xsv7c.com2.z0.glb.clouddn.com/freeseizedraggablelayout_demo_compress_0.2.gif)
 
 
-[Download Demo](http://7xsv7c.com1.z0.glb.clouddn.com/freeseizedraggablelayout_demo.apk)
+###[Download Demo](http://7xsv7c.com2.z0.glb.clouddn.com/freeseizedraggablelayout_demo_0.2.apk)
 
 
 ###Usage
@@ -21,7 +27,7 @@ A viewgroup enable custom size of childviews and change their position which has
 
 ```groovy
 dependencies {
-   compile 'com.miao:freesizedraggablelayout:0.0.1'
+   compile 'com.miao:freesizedraggablelayout:0.0.2'
 }
 ```
 
@@ -31,7 +37,7 @@ dependencies {
 <dependency>
   <groupId>com.miao</groupId>
   <artifactId>freesizedraggablelayout</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.2</version>
   <type>pom</type>
 </dependency>
 ```
@@ -45,7 +51,7 @@ Use it in your own code:
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 ```	
-2.get the viewgroup and set the size of it
+2.set the viewgroup and set the size of it
 ```java
 FreeSizeDraggableLayout fsdLayout = (FreeSizeDraggableLayout) findViewById(R.id.fsd_layout);
 fsdLayout.setUnitWidthNum(4);
@@ -87,11 +93,7 @@ private Button createButton(int i) {
 freeSizeDraggableLayout.setList(list);
 ```
 
-you can get how to use it easily at [demo's MainActivity](https://github.com/alivebao/FreeSizeDraggableLayout/tree/master/app/src/main/java/com/miao/administrator/freesizedraggablelayout)
-
-####Defect
-----
-
-1.data is just set by the function "setlist" in viewgroup(freeSizeDraggableLayout), an adapter will added in next version
-
-2.Event dispatch in FreeSizeDraggableLayout is a mess
+PS: Function of **change position between group position and draggled item**(in v0.0.1, we can just change two view has the same size, we can change the position of **whole group of views** and **the view dragged** if they have the same size in v0.0.2. just like the third scenario in demo) is added in version 0.0.2, set it disable if you don't need it:
+```java
+freeSizeDraggableLayout.setGroupChangeEnable(false);
+```

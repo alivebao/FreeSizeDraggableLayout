@@ -12,7 +12,7 @@ public class DetailView {
      */
     private Point mBeginPoint;
     /**
-     *size of view, performance by unit size
+     * size of view, performance by unit size
      */
     private int mWidthNum;
     private int mHeightNum;
@@ -23,6 +23,13 @@ public class DetailView {
 
     public DetailView() {
         this(null, 0, 0, null);
+    }
+
+    public DetailView(DetailView detailView) {
+        setPoint(detailView.getPoint());
+        setWidhtNum(detailView.getWidthNum());
+        setHeightNum(detailView.getHeightNum());
+        setView(detailView.getView());
     }
 
     public DetailView(Point p, int width, int height, View v) {
