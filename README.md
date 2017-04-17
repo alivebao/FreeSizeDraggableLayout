@@ -1,26 +1,26 @@
-##Android FreeSizeDraggableLayout
+## Android FreeSizeDraggableLayout
 
 -----
 
 A viewgroup enable custom size of childviews and change their position which has same size by drag
 
 ---
-###Analyze
+### Analyze
 
 
 [FreeSizeDraggableLayout实现过程解析](http://alivebao.github.io/2016/04/16/FreeSizeDraggableLayout/)
 
 
-###Demo
+### Demo
 
 
 ![FreeSizeDraggableLayout](http://7xsv7c.com2.z0.glb.clouddn.com/freeseizedraggablelayout_demo_compress_0.2.gif)
 
 
-###[Download Demo](http://7xsv7c.com2.z0.glb.clouddn.com/freeseizedraggablelayout_demo_0.2.apk)
+### [Download Demo](http://7xsv7c.com2.z0.glb.clouddn.com/freeseizedraggablelayout_demo_0.2.apk)
 
 
-###Usage
+### Usage
 ----
 
 #### Gradle
